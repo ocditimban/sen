@@ -1,12 +1,12 @@
 {
-    "name": "ph/zzz",
+    "name": "ph/sen",
     "description": "A short description of what your package does",
     "require": {
         "php": "^7.2"
     },
     "autoload": {
         "psr-4": {
-            "ph\\zzz\\" : "src/"
+            "ph\\sen\\" : "src/"
         }
     },
     "minimum-stability": "dev"
