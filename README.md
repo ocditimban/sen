@@ -1,4 +1,5 @@
 # zzz
 
-
-''' composer require ph/sen @dev '''
+```
+composer require ph/sen @dev
+```
