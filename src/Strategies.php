@@ -6,7 +6,7 @@
  * Time: 1:46 PM
  */
 
-namespace App\Controller;
+namespace ph\sen;
 
 use App\Controller\Indicators;
 use App\Controller\CustomIndicators;
