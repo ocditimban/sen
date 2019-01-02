@@ -6,7 +6,7 @@
  * Time: 6:26 PM
  */
 
-namespace App\Controller;
+namespace ph\sen;
 
 
 trait ManagerLogic
