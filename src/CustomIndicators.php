@@ -8,7 +8,6 @@
 
 namespace ph\sen;
 
-use App\Controller\OHLC;
 use Bowhead\Util\Util;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
