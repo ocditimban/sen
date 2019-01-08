@@ -134,7 +134,7 @@ trait CustomStrategies
         $uid = 1;
         // normal with active user
         $user = $this->helper->findUserById($uid);
-        if (self::ACTIVE == $user->getStatus()) {
+        if ($this->helper->isActiveUser($uid)) {
             return 1;
         }
 
