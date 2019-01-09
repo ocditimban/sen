@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="fos_rest.mime_type_listener" class="FOS\RestBundle\EventListener\MimeTypeListener" public="true" />
+        <service id="sen.user_manager" class="ph\sen\Doctrine\UserManager" public="true" />
         <defaults autowire="true" autoconfigure="true" public="false" />
     </services>
 
