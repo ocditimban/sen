@@ -14,10 +14,7 @@
         "symfony/maker-bundle": "^1.11"
     },
     "scripts": {
-        "clear-cache": "php tests/app/bin/console cache:clear --env=test --ansi",
-//        "clear-cache-then-test": [
-//            "@clear-cache"
-//        ]
+        "clear-cache": "php tests/app/bin/console cache:clear --env=test --ansi"
     },
     "extra": {
         "branch-alias": {
