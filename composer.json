@@ -1,5 +1,6 @@
 {
     "name": "ph/sen",
+    "type": "symfony-bundle",
     "description": "A short description of what your package does",
     "require": {
         "php": "^7.2",
