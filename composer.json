@@ -2,11 +2,26 @@
     "name": "ph/sen",
     "description": "A short description of what your package does",
     "require": {
-        "php": "^7.2"
+        "php": "^7.2",
+        "symfony/framework-bundle": "^v4.2"
     },
     "autoload": {
         "psr-4": {
             "ph\\sen\\" : "src/"
+        }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.11"
+    },
+    "scripts": {
+        "clear-cache": "php tests/app/bin/console cache:clear --env=test --ansi",
+//        "clear-cache-then-test": [
+//            "@clear-cache"
+//        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
         }
     },
     "minimum-stability": "dev"

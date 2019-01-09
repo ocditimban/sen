@@ -9,3 +9,8 @@ composer require ph/sen @dev
 rm -rf composer.lock vendor/
 composer install
 ```
+
+# You can clear with:
+```
+composer run-script clear-cache # if you want to clear the cache
+```
