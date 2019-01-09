@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class TienvxSymfonySkeletonExtension extends Extension
+class PhSenExtension extends Extension
 {
     /**
      * {@inheritdoc}
