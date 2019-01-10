@@ -3,7 +3,7 @@ namespace ph\sen\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use App\Entity\User;
+use ph\sen\Entity\User;
 
 class UserManager
 {
@@ -22,64 +22,49 @@ class UserManager
         $this->objectManager = $om;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteUser(User $user)
+    public function findUserByUserName($userName)
     {
-        $this->objectManager->remove($user);
-        $this->objectManager->flush();
+        return $this->getRepository->findOneBy(['user_name' => $userName]);
     }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getClass()
+
+    public function findUserById($id) {
+        return $this->getRepository->find($id);
+    }
+
+    public function isDisableUser($id)
     {
-        if (false !== strpos($this->class, ':')) {
-            $metadata = $this->objectManager->getClassMetadata($this->class);
-            $this->class = $metadata->getName();
+        $user = $this->findUserById($id);
+        return (self::DISABLE == $user->getStatus());
+    }
+
+    public function userGetData($id)
+    {
+        $user = $this->findUserById($id);
+        return json_decode($user->getData(), true);
+    }
+
+    public function isActiveUser($id)
+    {
+        $user = $this->findUserById($id);
+        return (self::ACTIVE == $user->getStatus());
+    }
+
+    public function blockUserById($userId)
+    {
+        if (!$user = $this->findUserById($userId)) {
+            return false;
         }
-        return $this->class;
+
+        $user->setStatus(self::BLOCK);
+        $this->updateEntity($user);
+        return true;
     }
-    /**
-     * {@inheritdoc}
-     */
-    public function findUserBy(array $criteria)
-    {
-        return $this->getRepository()->findOneBy($criteria);
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function findUsers()
-    {
-        return $this->getRepository()->findAll();
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function reloadUser(UserInterface $user)
-    {
-        $this->objectManager->refresh($user);
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function updateUser(UserInterface $user, $andFlush = true)
-    {
-        $this->updateCanonicalFields($user);
-        $this->updatePassword($user);
-        $this->objectManager->persist($user);
-        if ($andFlush) {
-            $this->objectManager->flush();
-        }
-    }
+
     /**
      * @return ObjectRepository
      */
     protected function getRepository()
     {
-        return $this->objectManager->getRepository($this->getClass());
+        return $this->objectManager->getRepository(User::class);
     }
 }
