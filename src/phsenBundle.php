@@ -5,7 +5,7 @@ use ph\sen\DependencyInjection\Compiler\UserPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class PhSenBundle extends Bundle
+class phsenBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
