@@ -6,7 +6,7 @@ use App\Entity\Activity;
 use App\Entity\Profit;
 use App\Entity\User;
 use App\Exchange\BinanceExchange;
-use App\Message\ErrorMessage;
+use ph\sen\ErrorMessage;
 use App\Repository\ActivityRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -51,8 +51,6 @@ class HelperService
         $this->activityManager = $activityManager;
         $this->userManager = $userManager;
         $this->profitManager = $profitManager;
-
-        $this->profitRepo = $entityManager->getRepository(Profit::class);
         $this->templateService = $templateService;
     }
 
