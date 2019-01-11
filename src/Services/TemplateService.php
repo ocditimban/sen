@@ -1,6 +1,6 @@
 <?php
 
-namespace ph\sen;
+namespace ph\sen\Services;
 
 
 use Twig\Environment as Twig;

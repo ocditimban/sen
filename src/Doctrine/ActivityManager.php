@@ -5,6 +5,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use ph\sen\Entity\Activity;
 use ph\sen\Entity\User;
+use ph\sen\Services\EntityServiceTrait;
 
 class ActivityManager
 {
@@ -13,6 +14,8 @@ class ActivityManager
      */
     protected $objectManager;
     protected $activityRepo;
+
+    use EntityServiceTrait;
 
     /**
      * Constructor.
@@ -49,8 +52,8 @@ class ActivityManager
         $activity->setExchange($exchange);
         $activity->setUuid($uuid);
         $activity->setOutcome($outcome);
-        $this->objectManager->persist($activity);
-        $this->objectManager->flush();
+
+        $this->updateEntity($activity);
     }
 
     public function getActivityByUserId($text, $userId)
@@ -65,8 +68,7 @@ class ActivityManager
 
     public function updateStatus($activity, $outcome = 'finished') {
         $activity->setOutcome($outcome);
-        $this->objectManager->persist($activity);
-        $this->objectManager->flush();
+        $this->updateEntity($activity);
     }
 
     public function findActivityByOutcome($userId, $outcome): ?Activity
@@ -87,8 +89,7 @@ class ActivityManager
         $exchange = $this->getExchange($activity->getExchange(), $userId);
         $orderId = $command->process($exchange);
         $activity->setTradeId($orderId);
-        $this->objectManager->persist($activity);
-        $this->objectManager->flush();
+        $this->updateEntity($activity);
 
         return $orderId;
     }

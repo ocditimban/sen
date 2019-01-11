@@ -1,6 +1,6 @@
 <?php
 
-namespace ph\sen;
+namespace ph\sen\Services;
 
 use App\Entity\Activity;
 use App\Entity\Profit;
@@ -37,18 +37,19 @@ class HelperService
     const ACTIVE = 1;
     const DISABLE = -1;
 
-    public $entityManage;
+    public $objectManager;
     public $activity;
     public $user;
     public $profit;
     private $templateService;
-
+    
+    use EntityServiceTrait;
     use BinanceServiceTrait;
 
-    public function __construct(ObjectManager $entityManager, TemplateService $templateService, ActivityManager $activityManager, UserManager $userManager, ProfitManager $profitManager)
+    public function __construct(ObjectManager $objectManager, TemplateService $templateService, ActivityManager $activityManager, UserManager $userManager, ProfitManager $profitManager)
     {
         $this->messages = new ErrorMessage();
-        $this->entityManage = $entityManager;
+        $this->objectManager = $objectManager;
         $this->activity = $activityManager;
         $this->user = $userManager;
         $this->profit = $profitManager;
@@ -87,14 +88,6 @@ class HelperService
         }
 
         return null;
-    }
-
-
-
-    public function updateEntity($activity)
-    {
-        $this->entityManage->persist($activity);
-        $this->entityManage->flush();
     }
 
     public function getBalanceInfo($uid)

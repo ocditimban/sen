@@ -5,6 +5,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use ph\sen\Entity\Profit;
 use ph\sen\Entity\User;
+use ph\sen\Services\EntityServiceTrait;
 
 class ProfitManager
 {
@@ -13,6 +14,8 @@ class ProfitManager
      */
     protected $objectManager;
     protected $profitRepo;
+
+    use EntityServiceTrait;
 
     /**
      * Constructor.
@@ -38,14 +41,7 @@ class ProfitManager
         $profit->setCreatedDate($createdDate);
         $profit->setPercent($percent);
         $profit->setData($data);
-        $this->objectManager->persist($profit);
-        $this->objectManager->flush();
-    }
-
-    public function updateProfit($profit)
-    {
-        $this->objectManager->persist($profit);
-        $this->objectManager->flush();
+        $this->updateEntity($profit);
     }
 
     public function calculatorProfit($uid, $time, $percent, $money, $exchange = 'bn')
@@ -58,7 +54,7 @@ class ProfitManager
         else {
             $profit->setPercent($profit->getPercent() + $percent);
             $profit->setData($data);
-            $this->updateProfit($profit);
+            $this->updateEntity($profit);
         }
     }
 }
