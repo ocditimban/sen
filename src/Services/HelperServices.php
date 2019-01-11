@@ -37,9 +37,10 @@ class HelperService
     const ACTIVE = 1;
     const DISABLE = -1;
 
-    private $entityManage;
-    private $activityManager;
-    private $userManager;
+    public $entityManage;
+    public $activity;
+    public $user;
+    public $profit;
     private $templateService;
 
     use BinanceServiceTrait;
@@ -48,9 +49,9 @@ class HelperService
     {
         $this->messages = new ErrorMessage();
         $this->entityManage = $entityManager;
-        $this->activityManager = $activityManager;
-        $this->userManager = $userManager;
-        $this->profitManager = $profitManager;
+        $this->activity = $activityManager;
+        $this->user = $userManager;
+        $this->profit = $profitManager;
         $this->templateService = $templateService;
     }
 
@@ -78,7 +79,7 @@ class HelperService
      * @param $userId
      * @return BinanceExchange|null
      */
-    public function getExchange($sign, $userId):? BinanceExchange
+    public function getExchange($userId, $sign = 'bn'): ?BinanceExchange
     {
         if (strtolower($sign) == self::BINANCE_SIGN) {
             $user = $this->findUserById($userId);
