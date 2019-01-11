@@ -3,10 +3,28 @@ namespace ph\sen\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use ph\sen\Entity\Activity;
 use ph\sen\Entity\User;
 
 class ActivityManager
 {
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+    protected $activityRepo;
+
+    /**
+     * Constructor.
+     *
+     * @param ObjectManager            $om
+     */
+    public function __construct(ObjectManager $om)
+    {
+        $this->objectManager = $om;
+        $this->activityRepo = $this->objectManager->getRepository(Activity::class);
+    }
+
     public function findActivityByUuid($uuid, $userId)
     {
         return $this->activityRepo->findOneBy(['uuid' => $uuid, 'uid' => $userId, 'outcome' => 'pending']);
@@ -15,6 +33,11 @@ class ActivityManager
     public function findActivityByOrderId($orderId): ?Activity
     {
         return $this->activityRepo->findOneBy(['tradeId' => $orderId]);
+    }
+
+    public function findActivityById($id): ?Activity
+    {
+        return $this->activityRepo->find($id);
     }
 
     public function insertActivity($uuid, $uid, $class, $exchange, $outcome, $data)
@@ -26,8 +49,48 @@ class ActivityManager
         $activity->setExchange($exchange);
         $activity->setUuid($uuid);
         $activity->setOutcome($outcome);
-        $this->entityManage->persist($activity);
-        $this->entityManage->flush();
+        $this->objectManager->persist($activity);
+        $this->objectManager->flush();
+    }
+
+    public function getActivityByUserId($text, $userId)
+    {
+        $uuid = ltrim($text, "/");
+        $longUuid = $this->expandUuid($uuid);
+
+        if ($activity = $this->findActivityByUuid($longUuid, $userId)) {
+            return $activity;
+        }
+    }
+
+    public function updateStatus($activity, $outcome = 'finished') {
+        $activity->setOutcome($outcome);
+        $this->objectManager->persist($activity);
+        $this->objectManager->flush();
+    }
+
+    public function findActivityByOutcome($userId, $outcome): ?Activity
+    {
+        return $this->activityRepo->findOneBy(['uid' => $userId, 'outcome' => $outcome]);
+    }
+
+    public function findLatestActivity()
+    {
+        return $this->activityRepo->findOneBy([], ['id' => 'DESC']);
+    }
+
+    public function process(Activity $activity, $userId)
+    {
+        $className = $activity->getClass();
+        $command = new $className();
+        $command->addOjbect(json_decode($activity->getData(), true));
+        $exchange = $this->getExchange($activity->getExchange(), $userId);
+        $orderId = $command->process($exchange);
+        $activity->setTradeId($orderId);
+        $this->objectManager->persist($activity);
+        $this->objectManager->flush();
+
+        return $orderId;
     }
 
     public function expandUuid($shorterUuid) {
@@ -52,21 +115,4 @@ class ActivityManager
 
         return $shorter->reduce($longUuid);
     }
-
-    public function getActivityByUserId($text, $userId)
-    {
-        $uuid = ltrim($text, "/");
-        $longUuid = $this->expandUuid($uuid);
-
-        if ($activity = $this->findActivityByUuid($longUuid, $userId)) {
-            return $activity;
-        }
-    }
-
-    public function updateStatus($activity) {
-        $activity->setOutcome('finished');
-        $this->entityManage->persist($activity);
-        $this->entityManage->flush();
-    }
-
 }
