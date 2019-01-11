@@ -1,6 +1,6 @@
 <?php
 
-namespace ph\sen;
+namespace ph\sen\Services;
 
 use App\Command\BaseCommand;
 use App\Exchange\BinanceExchange;
