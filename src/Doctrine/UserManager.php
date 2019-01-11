@@ -11,6 +11,7 @@ class UserManager
      * @var ObjectManager
      */
     protected $objectManager;
+    protected $userRepo;
 
     /**
      * Constructor.
@@ -20,15 +21,16 @@ class UserManager
     public function __construct(ObjectManager $om)
     {
         $this->objectManager = $om;
+        $this->userRepo = $this->objectManager->getRepository(User::class);
     }
 
     public function findUserByUserName($userName)
     {
-        return $this->getRepository->findOneBy(['user_name' => $userName]);
+        return $this->userRepo->findOneBy(['user_name' => $userName]);
     }
 
     public function findUserById($id) {
-        return $this->getRepository->find($id);
+        return $this->userRepo->find($id);
     }
 
     public function isDisableUser($id)
@@ -60,11 +62,14 @@ class UserManager
         return true;
     }
 
-    /**
-     * @return ObjectRepository
-     */
-    protected function getRepository()
+    public function activeUserById($userId)
     {
-        return $this->objectManager->getRepository(User::class);
+        if (!$user = $this->findUserById($userId)) {
+            return false;
+        }
+
+        $user->setStatus(self::ACTIVE);
+        $this->updateEntity($user);
+        return true;
     }
 }
