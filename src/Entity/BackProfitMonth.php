@@ -5,7 +5,7 @@ namespace ph\sen\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\BackProfitMonthRepository")
+ * @ORM\Entity
  */
 class BackProfitMonth
 {

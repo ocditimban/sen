@@ -5,8 +5,8 @@ namespace ph\sen\Services;
 use App\Entity\Activity;
 use App\Entity\Profit;
 use App\Entity\User;
-use App\Exchange\BinanceExchange;
-use ph\sen\ErrorMessage;
+use ph\sen\Exchange\BinanceExchange;
+use ph\sen\Message\ErrorMessage;
 use App\Repository\ActivityRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -83,7 +83,7 @@ class HelperService
     public function getExchange($userId, $sign = 'bn'): ?BinanceExchange
     {
         if (strtolower($sign) == self::BINANCE_SIGN) {
-            $user = $this->findUserById($userId);
+            $user = $this->user->findUserById($userId);
             return new BinanceExchange($user->getApiKey(), $user->getSecretKey());
         }
 
@@ -92,7 +92,7 @@ class HelperService
 
     public function getBalanceInfo($uid)
     {
-        $exchange = $this->getExchange('bn', $uid);
+        $exchange = $this->getExchange($uid);
         $balances = $exchange->getBalance();
 
         return $this->templateService->renderBalances($balances);
@@ -126,7 +126,7 @@ class HelperService
 
     public function getPriceInfo($symbol, $uid)
     {
-        $exchange = $this->getExchange('bn', $uid);
+        $exchange = $this->getExchange($uid);
         $symbol = $this->formatSymbol($symbol);
         $symbolInfo = $exchange->getPrevDay($symbol);
 

@@ -70,8 +70,8 @@ trait CustomStrategies
     {
         $uid = 1;
 
-        $ex = $this->helper->getExchange('bn', $uid);
-        $activity = $this->helper->findActivityByOutcome($uid, self::BUY);
+        $ex = $this->helper->getExchange($uid);
+        $activity = $this->helper->user->findActivityByOutcome($uid, self::BUY);
         $beforeData = json_decode($activity->getData(), true);
         $data = ['before_buyer' => $beforeData['price'], 'current_price' => $ex->getCurrentPrice(self::SYMBOL)];
         $milliSecondBuyTime = $this->changeTimeStringToMilliSecond($beforeData['time'], self::LONG_TIME_STRING);
@@ -83,7 +83,7 @@ trait CustomStrategies
         // current percent smaller than limited percent
         // and buy time below with past time = 60m
         if ($percent <= self::LIMITED_PERCENT && ($milliSecondBuyTime < $pastMilliSecondTime)) {
-            $this->helper->blockUserById($uid);
+            $this->helper->user->blockUserById($uid);
             $text .= ' The user was stop-limited';
             return -1;
         }
@@ -94,8 +94,8 @@ trait CustomStrategies
     {
         $uid = 1;
 
-        $ex = $this->helper->getExchange('bn', $uid);
-        $activity = $this->helper->findActivityByOutcome($uid, self::BUY);
+        $ex = $this->helper->getExchange($uid);
+        $activity = $this->helper->activity->findActivityByOutcome($uid, self::BUY);
         $beforeData = json_decode($activity->getData(), true);
         $milliSecondBuyTime = $this->changeTimeStringToMilliSecond($beforeData['time'], self::LONG_TIME_STRING);
         $endMilliSecondTime = $this->changeTimeStringToMilliSecond(date(self::LONG_TIME_STRING), self::LONG_TIME_STRING);
@@ -121,7 +121,7 @@ trait CustomStrategies
         $currentPrice = $ex->getCurrentPrice(self::SYMBOL);
         $profit = $ex->percentIncreate($beforeData['price'], $currentPrice);
         if ($overTarget && ($profit < self::PERCENT_LIMIT_PROFIT)) {
-            $this->helper->blockUserById($uid);
+            $this->helper->user->blockUserById($uid);
             $text .= ' The user was stop-limited';
             return -1;
         }
@@ -133,8 +133,8 @@ trait CustomStrategies
     {
         $uid = 1;
         // normal with active user
-        $user = $this->helper->findUserById($uid);
-        if ($this->helper->isActiveUser($uid)) {
+        $user = $this->helper->user->findUserById($uid);
+        if ($this->helper->user->isActiveUser($uid)) {
             return 1;
         }
 
@@ -146,16 +146,16 @@ trait CustomStrategies
             return 0;
         }
         // Active the user
-        $this->helper->activeUserById($uid);
+        $this->helper->user->activeUserById($uid);
         return 1;
     }
 
     public function phuongb_going_to_buy($pair, $data, $return_full = false, &$text = '')
     {
         $uid = 1;
-        $activity = $this->helper->findLatestActivity();
+        $activity = $this->helper->activity->findLatestActivity();
         $data = json_decode($activity->getData(), true);
-        $ex = $this->helper->getExchange('bn', $uid);
+        $ex = $this->helper->getExchange($uid);
         $currentPrice = $ex->getCurrentPrice(self::SYMBOL);
         $text .= ' current result: ' . $result = $this->getResults();
 

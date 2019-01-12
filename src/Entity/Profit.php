@@ -5,7 +5,7 @@ namespace ph\sen\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProfitRepository")
+ * @ORM\Entity
  */
 class Profit
 {

@@ -2,7 +2,7 @@
 
 namespace ph\sen\Services;
 
-use App\Command\BaseCommand;
+use ph\sen\Command\BaseCommand;
 use App\Exchange\BinanceExchange;
 
 trait BinanceServiceTrait
@@ -10,7 +10,7 @@ trait BinanceServiceTrait
 
     public function binanceBuy($symbol = 'ADAUSDT', $uid, $price, $percent = '0%') {
         /** @var BinanceExchange $binance */
-        $binance = $this->getExchange($sign = 'bn', $uid);
+        $binance = $this->getExchange(1);
         $symbolInfo = $binance->getSymbolInfomation($symbol);
         $balance = (int) $binance->calculateQuantity($symbolInfo['quoteAsset'], '100%');
         // total USDT
@@ -21,7 +21,7 @@ trait BinanceServiceTrait
     public function checkQuantity($symbol = 'ADAUSDT', $uid, $type = 'buy')
     {
         /** @var BinanceExchange $binance */
-        $binance = $this->getExchange($sign = 'bn', $uid);
+        $binance = $this->getExchange(1);
         $symbolInfo = $binance->getSymbolInfomation($symbol);
         $asset = ('buy' === $type) ? $symbolInfo['quoteAsset'] : $symbolInfo['baseAsset'];
         $balance = (int) $binance->calculateQuantity($asset, '100%');
@@ -42,7 +42,7 @@ trait BinanceServiceTrait
 
     public function binanceSell($symbol = 'ADAUSDT', $uid, $price, $percent = '0%') {
         /** @var BinanceExchange $binance */
-        $binance = $this->getExchange($sign = 'bn', $uid);
+        $binance = $this->getExchange(1);
         $symbolInfo = $binance->getSymbolInfomation($symbol);
         $balance = (int) $binance->calculateQuantity($symbolInfo['baseAsset'], '100%');
         // total ADA

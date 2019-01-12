@@ -7,6 +7,10 @@ use ph\sen\Entity\User;
 
 class UserManager
 {
+    const BLOCK = 0;
+    const ACTIVE = 1;
+    const DISABLE = -1;
+
     /**
      * @var ObjectManager
      */

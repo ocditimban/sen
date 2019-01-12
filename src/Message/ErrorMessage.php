@@ -1,6 +1,6 @@
 <?php
 
-namespace ph\sen;
+namespace ph\sen\Message;
 
 
 class ErrorMessage

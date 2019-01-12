@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Exchange;
+namespace ph\sen\Exchange;
 
-use App\Command\BaseCommand;
+use ph\sen\Command\BaseCommand;
 use Binance\API;
 
 class BinanceExchange
@@ -62,7 +62,6 @@ class BinanceExchange
     public function getCurrentPrice($symbol)
     {
         $prices = $this->api->prices();
-
         return (isset($prices[$symbol])) ? $prices[$symbol] : 0;
     }
 
