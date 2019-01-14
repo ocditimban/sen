@@ -156,7 +156,7 @@ class BinanceExchange
         }
 
         foreach ($openorders as $openorder) {
-            if ('LIMIT' == $openorder['type']) {
+            if ('STOP_LOSS_LIMIT' == $openorder['type']) {
                 return true;
             }
         }
