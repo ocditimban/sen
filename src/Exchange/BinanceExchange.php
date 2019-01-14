@@ -49,9 +49,10 @@ class BinanceExchange
 
     public function stopLoss($symbol, $quantity, $price, $percent)
     {
-        $fromPrice = $this->calculatePercent($price, $percent);
-        $flags['stopPrice'] = $this->calculatePercent($fromPrice, 50);
-        return $this->api->sell($symbol, $quantity, $fromPrice, 'STOP_LOSS_LIMIT', $flags);
+        $stopPrice = $this->calculatePercent($price, $percent);
+        $atPrice = $this->calculatePercent($stopPrice, 50);
+        $flags['stopPrice'] = $stopPrice;
+        return $this->api->sell($symbol, $quantity, $atPrice, 'STOP_LOSS_LIMIT', $flags);
     }
 
     public function getSymbolInfomation($symbol)
