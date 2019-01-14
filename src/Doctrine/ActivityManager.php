@@ -76,7 +76,7 @@ class ActivityManager
         return $this->activityRepo->findOneBy(['uid' => $userId, 'outcome' => $outcome]);
     }
 
-    public function findLatestActivity()
+    public function findLatestActivity(): ?Activity
     {
         return $this->activityRepo->findOneBy([], ['id' => 'DESC']);
     }

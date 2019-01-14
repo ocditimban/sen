@@ -8,7 +8,7 @@ use Binance\API;
 class BinanceExchange
 {
     private $api;
-    private $expecials = ['BTC', 'ETH', 'USDT'];
+    private $expecials = ['BTC', 'ETH', 'USDT', 'PAX'];
     const LIMIT        = 50;
     const EXCHANGE_FEE = 0.1;
 
@@ -37,16 +37,21 @@ class BinanceExchange
             : $quantity;
     }
 
+    public function calculatePercent($price, $percent)
+    {
+        return round(($price * $percent) / 100, 3);
+    }
+
     public function sell($symbol, $quantity, $price)
     {
         return $this->api->sell($symbol, $quantity, $price);
     }
 
-    public function stopLoss($symbol, $quantity, $price, $stop)
+    public function stopLoss($symbol, $quantity, $price, $percent)
     {
-        $flags['stopPrice'] = $stop;
-
-        return $this->api->sell($symbol, $quantity, $price, 'STOP_LOSS_LIMIT', $flags);
+        $fromPrice = $this->calculatePercent($price, $percent);
+        $flags['stopPrice'] = $this->calculatePercent($fromPrice, 50);
+        return $this->api->sell($symbol, $quantity, $fromPrice, 'STOP_LOSS_LIMIT', $flags);
     }
 
     public function getSymbolInfomation($symbol)
@@ -129,6 +134,34 @@ class BinanceExchange
         }
 
         return $logs;
+    }
+
+    public function getOrderedPrice($symbol)
+    {
+        $openorders = $this->api->openOrders($symbol);
+        $results = $this->api->history($symbol, 1);
+        if (!$results) {
+            return [];
+        }
+
+        $result = reset($results);
+        return $result['price'];
+    }
+
+    public function hasStopLimit($symbol)
+    {
+        $openorders = $this->api->openOrders($symbol);
+        if (!$openorders) {
+            return false;
+        }
+
+        foreach ($openorders as $openorder) {
+            if ('LIMIT' == $openorder['type']) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getBalance()

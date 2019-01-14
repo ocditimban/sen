@@ -57,7 +57,7 @@ trait CustomStrategies
             return -1;
         }
 
-        if ($currentMfi <= 15) {
+        if ($currentMfi <= 25) {
             $text .= ' current Mfi: ' . $currentMfi . ' ==> should buy';
             return 1; // should buy
         }
