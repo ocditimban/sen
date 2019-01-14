@@ -71,7 +71,7 @@ trait CustomStrategies
         $uid = 1;
 
         $ex = $this->helper->getExchange($uid);
-        $activity = $this->helper->user->findActivityByOutcome($uid, self::BUY);
+        $activity = $this->helper->activity->findActivityByOutcome($uid, self::BUY);
         $beforeData = json_decode($activity->getData(), true);
         $data = ['before_buyer' => $beforeData['price'], 'current_price' => $ex->getCurrentPrice(self::SYMBOL)];
         $milliSecondBuyTime = $this->changeTimeStringToMilliSecond($beforeData['time'], self::LONG_TIME_STRING);
