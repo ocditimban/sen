@@ -290,4 +290,14 @@ class BinanceExchange
             'total'        => $quantity * $price,
         ];
     }
+
+    public function marketBuy($symbol, $quantity)
+    {
+        return $this->api->marketBuy($symbol, $quantity);
+    }
+
+    public function marketSell($symbol, $quantity)
+    {
+        return $this->api->marketSell($symbol, $quantity);
+    }
 }

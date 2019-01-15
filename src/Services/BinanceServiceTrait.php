@@ -18,6 +18,13 @@ trait BinanceServiceTrait
         $binance->buy($symbol, $quantity, $price);
     }
 
+    /**
+     * TYPE = sell => count quantity of ADA, TYPE = buy => count quantity of USDT
+     * @param string $symbol
+     * @param $uid
+     * @param string $type
+     * @return bool
+     */
     public function checkQuantity($symbol = 'ADAUSDT', $uid, $type = 'buy')
     {
         /** @var BinanceExchange $binance */
