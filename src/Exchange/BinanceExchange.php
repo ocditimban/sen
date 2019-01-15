@@ -181,13 +181,13 @@ class BinanceExchange
         return $results;
     }
 
-    public function cancelOrder($symbol)
+    public function cancelOrder($symbol, &$text = '')
     {
         $orders = $this->api->openOrders();
         foreach ($orders as $order) {
             if ($order['symbol'] == $symbol) {
                 $this->api->cancel($order['symbol'], $order['orderId']);
-
+                $text .= ' the symbol is canceled';
                 return true;
             }
         }

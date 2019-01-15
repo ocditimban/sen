@@ -4,6 +4,7 @@ namespace ph\sen\Doctrine;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use ph\sen\Entity\User;
+use ph\sen\Services\EntityServiceTrait;
 
 class UserManager
 {
@@ -16,6 +17,8 @@ class UserManager
      */
     protected $objectManager;
     protected $userRepo;
+
+    use EntityServiceTrait;
 
     /**
      * Constructor.
