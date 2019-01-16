@@ -12,10 +12,21 @@ trait BinanceServiceTrait
         /** @var BinanceExchange $binance */
         $binance = $this->getExchange(1);
         $symbolInfo = $binance->getSymbolInfomation($symbol);
-        $balance = (int) $binance->calculateQuantity($symbolInfo['quoteAsset'], '100%');
+        $balance = round($binance->calculateQuantity($symbolInfo['quoteAsset'], '100%'), 1);
         // total USDT
         $quantity = round($this->calculateTargetQuantity($balance, $price, $percent), 1);
         $binance->buy($symbol, $quantity, $price);
+    }
+
+    public function binanceSell($symbol = 'ADAUSDT', $uid, $price, $percent = '0%') {
+        /** @var BinanceExchange $binance */
+        $binance = $this->getExchange(1);
+        $symbolInfo = $binance->getSymbolInfomation($symbol);
+        $balance = round($binance->calculateQuantity($symbolInfo['baseAsset'], '100%'), 1);
+        // total ADA
+        $quantity = $this->calculateBalancePercent($balance, $percent);
+        $binance->sell($symbol, $quantity, $price);
+        return round($quantity * $price, 2);
     }
 
     /**
@@ -45,16 +56,5 @@ trait BinanceServiceTrait
     {
         $percent = BaseCommand::isPercent($percent);
         return ($percent / 100) * $balance;
-    }
-
-    public function binanceSell($symbol = 'ADAUSDT', $uid, $price, $percent = '0%') {
-        /** @var BinanceExchange $binance */
-        $binance = $this->getExchange(1);
-        $symbolInfo = $binance->getSymbolInfomation($symbol);
-        $balance = (int) $binance->calculateQuantity($symbolInfo['baseAsset'], '100%');
-        // total ADA
-        $quantity = $this->calculateBalancePercent($balance, $percent);
-        $binance->sell($symbol, $quantity, $price);
-        return round($quantity * $price, 2);
     }
 }
