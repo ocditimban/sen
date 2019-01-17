@@ -6,13 +6,13 @@
         "php": "^7.2",
         "symfony/framework-bundle": "^v4.2"
     },
-    "files": [
-        "src/Function/func.php"
-    ],
     "autoload": {
         "psr-4": {
             "ph\\sen\\" : "src/"
-        }
+        },
+        "files": [
+            "src/Function/func.php"
+        ]
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.11"
