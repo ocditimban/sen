@@ -7,7 +7,7 @@
         "symfony/framework-bundle": "^v4.2"
     },
     "files": [
-        "src/func.php"
+        "src/Function/func.php"
     ],
     "autoload": {
         "psr-4": {
