@@ -8,7 +8,7 @@
     },
     "extra": {
         "include_files": [
-            "./func.php"
+            "func.php"
         ]
     },
     "autoload": {
