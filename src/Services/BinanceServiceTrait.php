@@ -12,9 +12,9 @@ trait BinanceServiceTrait
         /** @var BinanceExchange $binance */
         $binance = $this->getExchange(1);
         $symbolInfo = $binance->getSymbolInfomation($symbol);
-        $balance = round($binance->calculateQuantity($symbolInfo['quoteAsset'], '100%'), 1);
+        $balance = floordec($binance->calculateQuantity($symbolInfo['quoteAsset'], '100%'), 1);
         // total USDT
-        $quantity = round($this->calculateTargetQuantity($balance, $price, $percent), 1);
+        $quantity = floordec($this->calculateTargetQuantity($balance, $price, $percent), 1);
         $binance->buy($symbol, $quantity, $price);
     }
 
@@ -22,11 +22,11 @@ trait BinanceServiceTrait
         /** @var BinanceExchange $binance */
         $binance = $this->getExchange(1);
         $symbolInfo = $binance->getSymbolInfomation($symbol);
-        $balance = round($binance->calculateQuantity($symbolInfo['baseAsset'], '100%'), 1);
+        $balance = floordec($binance->calculateQuantity($symbolInfo['baseAsset'], '100%'), 1);
         // total ADA
         $quantity = $this->calculateBalancePercent($balance, $percent);
         $binance->sell($symbol, $quantity, $price);
-        return round($quantity * $price, 2);
+        return floordec($quantity * $price, 2);
     }
 
     /**
@@ -49,7 +49,7 @@ trait BinanceServiceTrait
     public function calculateTargetQuantity($balance, $price, $percent)
     {
         $balancePercent = $this->calculateBalancePercent($balance, $percent);
-        return round($balancePercent / $price, 2);
+        return floordec($balancePercent / $price, 2);
     }
 
     public function calculateBalancePercent($balance, $percent)
