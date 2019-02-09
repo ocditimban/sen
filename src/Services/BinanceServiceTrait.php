@@ -43,7 +43,7 @@ trait BinanceServiceTrait
         $symbolInfo = $binance->getSymbolInfomation($symbol);
         $asset = ('buy' === $type) ? $symbolInfo['quoteAsset'] : $symbolInfo['baseAsset'];
         $balance = (int) $binance->calculateQuantity($asset, '100%');
-        return ($balance > 5);
+        return ($balance);
     }
 
     public function calculateTargetQuantity($balance, $price, $percent)
