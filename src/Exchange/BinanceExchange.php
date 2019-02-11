@@ -39,7 +39,7 @@ class BinanceExchange
 
     public function calculatePercent($price, $percent)
     {
-        return round(($price * $percent) / 100, 3);
+        return round(($price * $percent) / 100, 2);
     }
 
     public function sell($symbol, $quantity, $price)
