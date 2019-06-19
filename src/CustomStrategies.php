@@ -47,6 +47,65 @@ trait CustomStrategies
         return 0;
     }
 
+    public function isSecondBuy($data)
+    {
+        if (!isset($data['buy_time'])) {
+            return false;
+        }
+
+        if (2 >= $data['buy_time']) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function addBuyTime($pair, &$data)
+    {
+        // get indicate
+        $indicators = new CustomIndicators();
+        list($lastLastMfi, $lastMfi, $currentMfi) = $indicators->phuongMfis($pair, $data);
+        $currentMfi = (int)$currentMfi;
+
+        if (!isset($data['buy_count']) && $currentMfi <= 10) {
+            $data['buy_count'] = 1;
+            $data['buy_time'] = date(self::LONG_TIME_STRING);
+        }
+
+        // skip if current time - minutes smaller than time order
+        // below 4 hours
+        $buyTime = $this->changeTimeStringToMilliSecond($data['buy_time'], self::LONG_TIME_STRING);
+        $currentTime = $this->changeTimeStringToMilliSecond(date(self::LONG_TIME_STRING), self::LONG_TIME_STRING);
+        $currentTime = $this->reduceMilliSecondFromMinute($currentTime, 4 * 60);
+        if ($currentTime >= $buyTime && $currentMfi <= 10) {
+            $data['buy_count'] = $data['buy_count'] + 1;
+            $data['buy_time'] = $this->changeTimeStringToMilliSecond($data['buy_time'], self::LONG_TIME_STRING);
+        }
+    }
+
+    public function phuongb_buy_second($pair, $data, $return_full = false, &$text = '')
+    {
+        $uid = 1;
+
+        $ex = $this->helper->getExchange($uid);
+        $activity = $this->helper->activity->findActivityByOutcome($uid, self::BUY);
+        $data = json_decode($activity->getData(), true);
+
+        if ($this->isSecondBuy($data)) {
+            $text .= ' ready to buy (second_time) ';
+            return 1;
+        }
+
+        // add and save data
+        $this->addBuyTime($pair, $data);
+        $activity->setData(json_encode($data));
+
+        $count = isset($data['buy_count']) ? $data['buy_count'] : 0;
+        $text .= ' current count ' . $count;
+        return 0;
+    }
+
+
     public function phuongb_mfi($pair, $data, $return_full = false, &$text = '')
     {
         $indicators = new CustomIndicators();
