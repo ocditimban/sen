@@ -88,7 +88,7 @@ trait CustomStrategies
         $uid = 1;
 
         $ex = $this->helper->getExchange($uid);
-        $activity = $this->helper->activity->findActivityByOutcome($uid, self::BUY);
+        $activity = $this->helper->activity->findLatestActivity();
         $data = json_decode($activity->getData(), true);
 
         if ($this->isSecondBuy($data)) {
