@@ -60,26 +60,26 @@ trait CustomStrategies
         return true;
     }
 
-    public function addBuyTime($pair, &$data)
+    public function addBuyTime($pair, $data, &$userData)
     {
         // get indicate
         $indicators = new CustomIndicators();
         list($lastLastMfi, $lastMfi, $currentMfi) = $indicators->phuongMfis($pair, $data);
         $currentMfi = (int)$currentMfi;
 
-        if (!isset($data['buy_count']) && $currentMfi <= 10) {
-            $data['buy_count'] = 1;
-            $data['buy_time'] = date(self::LONG_TIME_STRING);
+        if (!isset($userData['buy_count']) && $currentMfi <= 10) {
+            $userData['buy_count'] = 1;
+            $userData['buy_time'] = date(self::LONG_TIME_STRING);
         }
 
         // skip if current time - minutes smaller than time order
         // below 4 hours
-        $buyTime = $this->changeTimeStringToMilliSecond($data['buy_time'], self::LONG_TIME_STRING);
+        $buyTime = $this->changeTimeStringToMilliSecond($userData['buy_time'], self::LONG_TIME_STRING);
         $currentTime = $this->changeTimeStringToMilliSecond(date(self::LONG_TIME_STRING), self::LONG_TIME_STRING);
         $currentTime = $this->reduceMilliSecondFromMinute($currentTime, 4 * 60);
         if ($currentTime >= $buyTime && $currentMfi <= 10) {
-            $data['buy_count'] = $data['buy_count'] + 1;
-            $data['buy_time'] = $this->changeTimeStringToMilliSecond($data['buy_time'], self::LONG_TIME_STRING);
+            $userData['buy_count'] = $userData['buy_count'] + 1;
+            $userData['buy_time'] = $this->changeTimeStringToMilliSecond($userData['buy_time'], self::LONG_TIME_STRING);
         }
     }
 
@@ -97,7 +97,7 @@ trait CustomStrategies
         }
 
         // add and save data
-        $this->addBuyTime($pair, $userData);
+        $this->addBuyTime($pair, $data, $userData);
         $user->setData(json_encode($userData));
         $count = isset($userData['buy_count']) ? $userData['buy_count'] : 0;
         $text .= ' current count ' . $count;
