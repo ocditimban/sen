@@ -47,17 +47,17 @@ trait CustomStrategies
         return 0;
     }
 
-    public function isSecondBuy($data)
+    public function isSecondBuy($userData)
     {
-        if (!isset($data['buy_time'])) {
+        if (!isset($userData['buy_count'])) {
             return false;
         }
 
-        if (2 >= $data['buy_time']) {
-            return true;
+        if (1 <= $data['buy_count']) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public function addBuyTime($pair, &$data)
@@ -86,21 +86,20 @@ trait CustomStrategies
     public function phuongb_buy_second($pair, $data, $return_full = false, &$text = '')
     {
         $uid = 1;
+        $user = $this->helper->user->findUserById($uid);
+        $userData = json_decode($user->getData(), true);
 
-        $ex = $this->helper->getExchange($uid);
-        $activity = $this->helper->activity->findLatestActivity();
-        $data = json_decode($activity->getData(), true);
-
-        if ($this->isSecondBuy($data)) {
+        if ($this->isSecondBuy($userData)) {
+            $userData['buy_count'] = 0;
+            $user->setData(json_encode($userData));
             $text .= ' ready to buy (second_time) ';
             return 1;
         }
 
         // add and save data
-        $this->addBuyTime($pair, $data);
-        $activity->setData(json_encode($data));
-
-        $count = isset($data['buy_count']) ? $data['buy_count'] : 0;
+        $this->addBuyTime($pair, $userData);
+        $user->setData(json_encode($userData));
+        $count = isset($userData['buy_count']) ? $userData['buy_count'] : 0;
         $text .= ' current count ' . $count;
         return 0;
     }
