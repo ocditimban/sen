@@ -74,7 +74,7 @@ trait CustomStrategies
 
         // skip if current time - minutes smaller than time order
         // below 4 hours
-        $buyTime = $this->changeTimeStringToMilliSecond($userData['buy_time'], self::LONG_TIME_STRING);
+        $buyTime = $this->changeTimeStringToMilliSecond($userData['buy_time'] = date(self::LONG_TIME_STRING), self::LONG_TIME_STRING);
         $currentTime = $this->changeTimeStringToMilliSecond(date(self::LONG_TIME_STRING), self::LONG_TIME_STRING);
         $currentTime = $this->reduceMilliSecondFromMinute($currentTime, 4 * 60);
         if ($currentTime >= $buyTime && $currentMfi <= 10) {
@@ -90,7 +90,7 @@ trait CustomStrategies
         $userData = json_decode($user->getData(), true);
 
         if ($this->isSecondBuy($userData)) {
-            $userData['buy_count'] = 0;
+            unset($userData['buy_count']);
             $user->setData(json_encode($userData));
             $text .= ' ready to buy (second_time) ';
             return 1;
