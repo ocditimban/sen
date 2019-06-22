@@ -67,8 +67,11 @@ trait CustomStrategies
         list($lastLastMfi, $lastMfi, $currentMfi) = $indicators->phuongMfis($pair, $data);
         $currentMfi = (int)$currentMfi;
 
+        if ($currentMfi > 10) {
+            return ;
+        }
 
-        if (!isset($userData['buy_count']) && $currentMfi <= 10) {
+        if (!isset($userData['buy_count'])) {
             $userData['buy_count'] = 1;
             $userData['buy_time'] = date(self::LONG_TIME_STRING);
         }
@@ -78,7 +81,7 @@ trait CustomStrategies
         $buyTime = $this->changeTimeStringToMilliSecond($userData['buy_time'], self::LONG_TIME_STRING);
         $currentTime = $this->changeTimeStringToMilliSecond(date(self::LONG_TIME_STRING), self::LONG_TIME_STRING);
         $currentTime = $this->reduceMilliSecondFromMinute($currentTime, 4 * 60);
-        if ($currentTime >= $buyTime && $currentMfi <= 10) {
+        if ($currentTime >= $buyTime) {
             $userData['buy_count'] = $userData['buy_count'] + 1;
             $userData['buy_time'] = $this->changeTimeStringToMilliSecond($userData['buy_time'], self::LONG_TIME_STRING);
         }
