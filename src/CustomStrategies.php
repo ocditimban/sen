@@ -94,20 +94,17 @@ trait CustomStrategies
         $userData = json_decode($user->getData(), true);
 
 
-//        if ($this->isSecondBuy($userData)) {
-//            unset($userData['buy_count']);
-//            unset($userData['buy_time']);
-//            $user->setData(json_encode($userData));
-//            $this->helper->updateEntity($user);
-//            $text .= ' ready to buy (second_time) ';
-//            return 1;
-//        }
+        if ($this->isSecondBuy($userData)) {
+            unset($userData['buy_count']);
+            unset($userData['buy_time']);
+            $user->setData(json_encode($userData));
+            $this->helper->updateEntity($user);
+            $text .= ' ready to buy (second_time) ';
+            return 1;
+        }
 
         // add and save data
         $this->addBuyTime($pair, $data, $userData);
-        $text .= '111 current count 111';
-        return 0;
-
         $user->setData(json_encode($userData));
         $this->helper->updateEntity($user);
         $count = isset($userData['buy_count']) ? $userData['buy_count'] : 0;
