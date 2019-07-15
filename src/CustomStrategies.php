@@ -117,6 +117,7 @@ trait CustomStrategies
         $indicators = new CustomIndicators();
         list($lastLastMfi, $lastMfi, $currentMfi) = $indicators->phuongMfis($pair, $data);
         $currentMfi = (int)$currentMfi;
+        $currentMfi = 10;
         if ($currentMfi >= 90) {
             $text .= ' current Mfi: ' . $currentMfi . ' ==> should sell ';
             return -1;
