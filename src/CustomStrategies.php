@@ -53,7 +53,7 @@ trait CustomStrategies
             return false;
         }
 
-        if (1 <= $userData['buy_count']) {
+        if (1 >= $userData['buy_count']) {
             return false;
         }
 
