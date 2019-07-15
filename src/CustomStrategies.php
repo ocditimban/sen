@@ -92,7 +92,7 @@ trait CustomStrategies
         $uid = 1;
         $user = $this->helper->user->findUserById($uid);
         $userData = json_decode($user->getData(), true);
-
+        return 1;
         // add and save data
         $this->addBuyTime($pair, $data, $userData);
         if ($this->isSecondBuy($userData)) {
