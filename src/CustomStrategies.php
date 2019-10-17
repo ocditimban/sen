@@ -110,6 +110,25 @@ trait CustomStrategies
         return 0;
     }
 
+    public function phuongb_percent($pair, $data, $return_full = false, &$text = '')
+    {
+        $uid = 1;
+        if ($activity = $this->helper->activity->findActivityByOutcome($this->uid, self::BUY)) {
+            $ex = $this->helper->getExchange($uid);
+
+            $beforeData = json_decode($activity->getData(), true);
+            $data = [
+                'before_buyer'  => $beforeData['price'],
+                'current_price' => $ex->getCurrentPrice(self::SYMBOL)
+            ];
+            $percent = $ex->percentIncreate($data['before_buyer'], $data['current_price']);
+            if ($percent < -10) {
+                return 1;
+            }
+            $text .= ' can not buy because the current price is : ' . (int) $percent . ' %';
+        }
+        return 0;
+    }
 
     public function phuongb_mfi($pair, $data, $return_full = false, &$text = '')
     {
